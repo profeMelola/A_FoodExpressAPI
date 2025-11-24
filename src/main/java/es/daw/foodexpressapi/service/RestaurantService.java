@@ -27,27 +27,42 @@ public class RestaurantService {
 
 
     public Optional<RestaurantDTO> create(RestaurantDTO restaurantDTO) {
-        //Restaurant restaurant = restaurantMapper.toEntity(restaurantDTO);
-        Restaurant restaurant = toEntity(restaurantDTO);
+        Restaurant restaurant = restaurantMapper.toEntity(restaurantDTO);
+        //Restaurant restaurant = toEntity(restaurantDTO);
         Restaurant savedRestaurant = restaurantRepository.save(restaurant);
         return Optional.of(restaurantMapper.toDTO(savedRestaurant));
         //return Optional.of(toDTO(savedRestaurant));
     }
 
-    public Restaurant toEntity(RestaurantDTO dto){
-        Restaurant restaurant = new Restaurant();
-        restaurant.setName(dto.getName());
-        restaurant.setAddress(dto.getAddress());
-        restaurant.setPhone(dto.getPhone());
-        return restaurant;
+    /**
+     * Sin gestionar excepción "NoExisteElRestaurante"
+     * @param id
+     * @return
+     */
+    public boolean delete(Long id) {
+        if (!restaurantRepository.existsById(id)) {
+            return false;
+        }
+
+        // si existe borro
+        restaurantRepository.deleteById(id);
+        return true;
     }
-    private RestaurantDTO toDTO(Restaurant restaurant) {
-        RestaurantDTO dto = new RestaurantDTO();
-        dto.setName(restaurant.getName());
-        dto.setAddress(restaurant.getAddress());
-        dto.setPhone(restaurant.getPhone());
-        return dto;
-    }
+
+//    public Restaurant toEntity(RestaurantDTO dto){
+//        Restaurant restaurant = new Restaurant();
+//        restaurant.setName(dto.getName());
+//        restaurant.setAddress(dto.getAddress());
+//        restaurant.setPhone(dto.getPhone());
+//        return restaurant;
+//    }
+//    private RestaurantDTO toDTO(Restaurant restaurant) {
+//        RestaurantDTO dto = new RestaurantDTO();
+//        dto.setName(restaurant.getName());
+//        dto.setAddress(restaurant.getAddress());
+//        dto.setPhone(restaurant.getPhone());
+//        return dto;
+//    }
 
 
 }
